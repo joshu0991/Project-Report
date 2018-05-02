@@ -32,47 +32,8 @@
 
 \title{Sping 2018 CS755 Project Report Acoustic Sensing}
 
-%
-% You need the command \numberofauthors to handle the 'placement
-% and alignment' of the authors beneath the title.
-%
-% For aesthetic reasons, we recommend 'three authors at a time'
-% i.e. three 'name/affiliation blocks' be placed beneath the title.
-%
-% NOTE: You are NOT restricted in how many 'rows' of
-% "name/affiliations" may appear. We just ask that you restrict
-% the number of 'columns' to three.
-%
-% Because of the available 'opening page real-estate'
-% we ask you to refrain from putting more than six authors
-% (two rows with three columns) beneath the article title.
-% More than six makes the first-page appear very cluttered indeed.
-%
-% Use the \alignauthor commands to handle the names
-% and affiliations for an 'aesthetic maximum' of six authors.
-% Add names, affiliations, addresses for
-% the seventh etc. author(s) as the argument for the
-% \additionalauthors command.
-% These 'additional authors' will be output/set for you
-% without further effort on your part as the last section in
-% the body of your article BEFORE References or any Appendices.
-
-\numberofauthors{2} %  in this sample file, there are a *total*
-% of EIGHT authors. SIX appear on the 'first-page' (for formatting
-% reasons) and the remaining two appear in the \additionalauthors section.
-%
+\numberofauthors{2}
 \author{
-% You can go ahead and credit any number of authors here,
-% e.g. one 'row of three' or two rows (consisting of one row of three
-% and a second row of one, two or three).
-%
-% The command \alignauthor (no curly braces needed) should
-% precede each author name, affiliation/snail-mail address and
-% e-mail address. Additionally, tag each line of
-% affiliation/address with \affaddr, and tag the
-% e-mail address with \email.
-%
-% 1st. author
 \alignauthor
 Mingrui Han\\
        \affaddr{George Mason University}\\
@@ -87,43 +48,109 @@ Joshua Lilly\\
        \affaddr{Fairfax, VA}\\
        \email{jlilly3@gmu.com}
 }
-% There's nothing stopping you putting the seventh, eighth, etc.
-% author on the opening page (as the 'third row') but we ask,
-% for aesthetic reasons that you place these 'additional authors'
-% in the \additional authors block, viz.
-
-% Just remember to make sure that the TOTAL number of authors
-% is the number that will appear on the first page PLUS the
-% number that will appear in the \additionalauthors section.
 
 \maketitle
 \begin{abstract}
-Abstract should be one paragraph summary of the introduc-
-tion.  Be sure to highlight your achievements.
+More and more IoT devices emerge into our daily life, aiming to ease
+our living style. Those devices such as smart TV, smart fridge
+will have more functionality to provide a better user experience.
+A traditional controller that uses buttons cannot meet the expectation
+of the usage. In this paper, we implement AAmouse \cite{yun:turning}, a system that tracks the device using acoustic sensing. It enables
+users to use their mobile devices as the controller to
+draw freely in the air. AAmouse adopts inaudible sound wave and Doppler shift effect to track the device movement. Human being cannot
+hear the sound wave frequency above 17kHz. However, these frequencies 
+are supported in commercial devices. AAmouse takes advantage of this
+unused frequencies. Also, AAmouse does not require specialized 
+hardware to operate. We implemented AAmouse in two platforms, PC and Android tablet. To refine the tracking result, we applied maximum
+ratio combining and signal smoothing filter. Then we conducted the 
+evaluation experiment. The actual error is larger than the AAmouse
+paper. We also discussed the possible reason of the error. In 
+addition, the difference between our implementation and the 
+original work is discussed in this work as well.
 \end{abstract}
 
-
-
-\keywords{ACM proceedings, \LaTeX, text tagging} % NOT required for Proceedings
+\keywords{AAmouse, acoustic sensing, inaudible sound wave}
 
 \section{Introduction}
-This section should summarize the entire paper.
+In this work, we implemented AAmouse, a system that utilize 
+acoustic signal and Doppler shift effect to track the device movement.
+AAmouse uses inaudible sound wave that operates above 17kHz.
+Researches indicate that human being cannot hear the sound wave above
+17kHz. However, current commercial speakers support those frequencies.
+The unique property of AAmouse is that it can operates in our daily 
+devices and it does not require any specialized hardware.
 
-\section{RELATED WORK}
+The original AAmouse uses STFT, Doppler shift, maximum ratio 
+combining (MRC) Kalman filter, and 
+particle filter. Our system is different than the original work with
+minor changes. 
+
+Our system sends the sound wave and analyze the received signal using
+Doppler shift effect. The frequency shift will give information to 
+calculate the velocity. We then used the velocity to calculate the
+distance that the device traveled. To refine the tracking result,
+we further apply MRC and signal smoothing
+filter. 
+
+We implemented the system in PC using matlab and in Android using
+Java. Some technical details we are using are different than the 
+original paper, but the overall concepts are the same. During the 
+experimental evaluation part, we observed that the actual system has
+larger error than the original paper.
+We provided detailed
+reasoning to explain what the potential causes are and what are the
+potential solutions.
+
+The rest of this paper is organized as follows. Section
+\ref{related_work} introduces some related works in this area.
+Section \ref{applications} provides some possible applications of
+this work in the future. Section \ref{roles and collaboration}
+summarized the contribution of each group member in this work. 
+Section \ref{project_overview} provides an overview of the project,
+compared to the original work. Section \ref{design_and_implementation}
+includes all the technical details of the implementation. We evaluated
+the system in section \ref{evaluation}.
+
+\section{Related Work} \label{related_work}
 State of the art techniques in literature, and how they are
 related to the work you’ve done.  This should not exceed half
 page
 
-\section{APPLICATIONS}
-Discuss how your technique can be used in real-life applica-
-tions.  Be sure to put your thoughts beyond what is written
-in the original paper.  This should not exceed half pag
+\section{Applications} \label{applications}
+IoT devices becomes more and more popular nowadays. Some appliances
+such as smart TV, smart fridge offer more functions than we ever
+had before. Merely using a remote controller with buttons cannot meet
+the expected user experience offered by those appliances. A mouse has
+been on of the best design for controllers. It enables a high level of 
+freedom of controlling the devices. There are recently mouse developed
+for smart TV. 
 
-\section{ROLES AND COLLABORATION}
-Only for teams.  Who did what and how did you collaborate.
-Be VERY specific.
+A traditional mouse requires a smooth surface to operate, which is 
+feasible for a typical PC. However, when it comes to the smart TV
+or smart fridge, it is not suitable to have a flat surface near them
+and it is not suitable for user to maintain a fixed position when
+using the appliance. For example, an user may want to control a TV 
+on couch, on desk, or on the dining table. Having a mouse in each
+one of the location is not feasible in real world. Our system can be
+applied in this scenario by enabling a mouse in the air on the go.
+User would be able to control the appliance wherever they want with
+rich control options.
 
-\section{PROJECT OVERVIEW}
+\section{Roles and collaboration} \label{roles and collaboration}
+We discussed the project implementation details together, including
+what we should implement, what the time line would be, what the issues
+are, and what we should do to solve them. For each technical concept
+we need, such as MRC, Kalman filter, STFT, Doppler Shift, and the
+particle filter, we discussed the implementation procedure, 
+potential issues, and the possible solutions.
+
+Mingrui Han: Implement the system in Android tablet. Review and discuss matlab code. 
+Research and implement third party tools which java does
+not have.  
+
+Joshua Lilly:
+
+\section{Project Overview} \label{project_overview}
 This section should provide an overview of the project, espe-
 ically compared to the original work.  Please include below
 subsections.   You  are  free  to  add  or  reorder  sections,  but
@@ -140,12 +167,12 @@ cially compared to the original work.  What parts were and
 were  not  implemented,  performance  gap  from  the  original
 work, etc.
 
-\section{DESIGN AND IMPLEMENTATION}
+\section{Design and Implementation} \label{design_and_implementation}
 This should be the main part of the report.  It should in-
 clude below subsections.  Feel free to add (do not remove)
 subsections and reorder them.
 
-\subsection{setup}
+\subsection{Setup}
 Scenarios  and  setup  of  your  implementation,  including  lo-
 cation,  hardware,  software,  and so on.  If possible,  include
 pictures and figures to be illustrative.  Compare your setup
@@ -169,7 +196,7 @@ unable to solve it, and your hypothesis on what would be the
 cause.  If you were not able to implement the entire system
 in the originial paper, explain why.
 
-\section{EVALUATION}
+\section{EVALUATION} \label{evaluation}
 Performance evaluation and potential improvement.  Should
 include below subsections.  Feel free to add (do not remove)
 subsections and reorder them.

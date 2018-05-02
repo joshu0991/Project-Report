@@ -1,3 +1,8 @@
-\begin{thebibliography}{}
+\begin{thebibliography}{1}
+
+\bibitem{yun:turning}
+S.~Yun, Y.-C. Chen, W.~Mao, and L.~Qiu.
+\newblock Turning a mobile device into a mouse in the air.
+\newblock In {\em MobiSys}, 2015.
 
 \end{thebibliography}

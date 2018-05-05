@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.19 (MiKTeX 2.9.6630 64-bit) (preloaded format=pdflatex 2018.4.29)  2 MAY 2018 15:11
+This is pdfTeX, Version 3.14159265-2.6-1.40.19 (MiKTeX 2.9.6630 64-bit) (preloaded format=pdflatex 2018.4.29)  5 MAY 2018 13:08
 entering extended mode
 **./sigproc-sp.tex
 (sigproc-sp.tex
@@ -269,38 +269,42 @@ LaTeX Font Info:    Try loading font information for U+lasy on input line 52.
 
 ("C:\Program Files\MiKTeX 2.9\tex\latex\base\ulasy.fd"
 File: ulasy.fd 1998/08/17 v2.2e LaTeX symbol font definitions
-)
-Overfull \hbox (3.69662pt too wide) in paragraph at lines 120--127
-\T1/aer/m/n/9 IoT de-vices be-comes more and more pop-u-lar nowa-days. Some
- []
-
-[1{C:/Users/myo03/AppData/Local/MiKTeX/2.9/pdftex/config/pdftex.map}
+) [1{C:/Users/myo03/AppData/Local/MiKTeX/2.9/pdftex/config/pdftex.map}
 
 
 ]
-Overfull \hbox (13.04756pt too wide) in paragraph at lines 190--198
+Overfull \hbox (3.69662pt too wide) in paragraph at lines 178--185
+\T1/aer/m/n/9 IoT de-vices be-comes more and more pop-u-lar nowa-days. Some
+ []
+
+[2]
+Overfull \hbox (13.04756pt too wide) in paragraph at lines 310--318
 \T1/aer/m/n/9 is on the orig-i-nal pa-per. This in-cludes prac-ti-cal is-sues y
 ou’ve
  []
 
-(sigproc-sp.bbl) [2] (sigproc-sp.aux) ) 
+(sigproc-sp.bbl [3]) [4
+
+] (sigproc-sp.aux) ) 
 Here is how much of TeX's memory you used:
- 2729 strings out of 493305
- 34401 string characters out of 3138874
- 97170 words of memory out of 3000000
- 6222 multiletter control sequences out of 15000+200000
+ 2739 strings out of 493305
+ 34715 string characters out of 3138874
+ 98202 words of memory out of 3000000
+ 6232 multiletter control sequences out of 15000+200000
  44167 words of font info for 58 fonts, out of 3000000 for 9000
  1141 hyphenation exceptions out of 8191
  41i,10n,28p,279b,246s stack positions out of 5000i,500n,10000p,200000b,50000s
-{C:/Program Files/MiKTeX 2.9/fonts/enc/d
-vips/base/8r.enc}<C:/Program Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cm
-r9.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmti9.pfb><C
-:/Program Files/MiKTeX 2.9/fonts/type1/urw/helvetic/uhvb8a.pfb><C:/Program File
-s/MiKTeX 2.9/fonts/type1/urw/helvetic/uhvr8a.pfb><C:/Program Files/MiKTeX 2.9/f
-onts/type1/urw/times/utmb8a.pfb>
-Output written on sigproc-sp.pdf (2 pages, 73784 bytes).
+{C:/Program Files/MiKTeX 2.9/fonts/enc/dvips/base/8r.enc}<C
+:/Program Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmmi6.pfb><C:/Program
+ Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmmi9.pfb><C:/Program Files/Mi
+KTeX 2.9/fonts/type1/public/amsfonts/cm/cmr9.pfb><C:/Program Files/MiKTeX 2.9/f
+onts/type1/public/amsfonts/cm/cmsy9.pfb><C:/Program Files/MiKTeX 2.9/fonts/type
+1/public/amsfonts/cm/cmti9.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/urw/hel
+vetic/uhvb8a.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/urw/helvetic/uhvr8a.p
+fb><C:/Program Files/MiKTeX 2.9/fonts/type1/urw/times/utmb8a.pfb>
+Output written on sigproc-sp.pdf (4 pages, 116407 bytes).
 PDF statistics:
- 30 PDF objects out of 1000 (max. 8388607)
+ 48 PDF objects out of 1000 (max. 8388607)
  0 named destinations out of 1000 (max. 500000)
  1 words of extra memory for PDF output out of 10000 (max. 10000000)
 

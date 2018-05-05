@@ -1,4 +1,75 @@
-\begin{thebibliography}{1}
+\begin{thebibliography}{10}
+
+\bibitem{Li:2012:RAI:2370216.2370280}
+F.~Li, C.~Zhao, G.~Ding, J.~Gong, C.~Liu, and F.~Zhao.
+\newblock A reliable and accurate indoor localization method using phone
+  inertial sensors.
+\newblock In {\em Proceedings of the 2012 ACM Conference on Ubiquitous
+  Computing}, UbiComp '12, pages 421--430, New York, NY, USA, 2012. ACM.
+
+\bibitem{Mao:2016:HAM:2973750.2985617}
+W.~Mao, J.~He, H.~Zheng, Z.~Zhang, and L.~Qiu.
+\newblock High-precision acoustic motion tracking: Demo.
+\newblock In {\em Proceedings of the 22Nd Annual International Conference on
+  Mobile Computing and Networking}, MobiCom '16, pages 491--492, New York, NY,
+  USA, 2016. ACM.
+
+\bibitem{Nandakumar:2016:FUA:2858036.2858580}
+R.~Nandakumar, V.~Iyer, D.~Tan, and S.~Gollakota.
+\newblock Fingerio: Using active sonar for fine-grained finger tracking.
+\newblock In {\em Proceedings of the 2016 CHI Conference on Human Factors in
+  Computing Systems}, CHI '16, pages 1515--1525, New York, NY, USA, 2016. ACM.
+
+\bibitem{Rai:2012:ZZC:2348543.2348580}
+A.~Rai, K.~K. Chintalapudi, V.~N. Padmanabhan, and R.~Sen.
+\newblock Zee: Zero-effort crowdsourcing for indoor localization.
+\newblock In {\em Proceedings of the 18th Annual International Conference on
+  Mobile Computing and Networking}, Mobicom '12, pages 293--304, New York, NY,
+  USA, 2012. ACM.
+
+\bibitem{Sun:2015:WEH:2789168.2790129}
+L.~Sun, S.~Sen, D.~Koutsonikolas, and K.-H. Kim.
+\newblock Widraw: Enabling hands-free drawing in the air on commodity wifi
+  devices.
+\newblock In {\em Proceedings of the 21st Annual International Conference on
+  Mobile Computing and Networking}, MobiCom '15, pages 77--89, New York, NY,
+  USA, 2015. ACM.
+
+\bibitem{Vasisht:2014:RVT:2645884.2645889}
+D.~Vasisht, J.~Wang, and D.~Katabi.
+\newblock Rf-idraw: Virtual touch screen in the air using rf signals.
+\newblock In {\em Proceedings of the 6th Annual Workshop on Wireless of the
+  Students, by the Students, for the Students}, S3 '14, pages 1--4, New York,
+  NY, USA, 2014. ACM.
+
+\bibitem{Wang:2016:DGT:2973750.2973764}
+W.~Wang, A.~X. Liu, and K.~Sun.
+\newblock Device-free gesture tracking using acoustic signals.
+\newblock In {\em Proceedings of the 22Nd Annual International Conference on
+  Mobile Computing and Networking}, MobiCom '16, pages 82--94, New York, NY,
+  USA, 2016. ACM.
+
+\bibitem{Wei:2015:MHP:2789168.2790113}
+T.~Wei and X.~Zhang.
+\newblock mtrack: High-precision passive tracking using millimeter wave radios.
+\newblock In {\em Proceedings of the 21st Annual International Conference on
+  Mobile Computing and Networking}, MobiCom '15, pages 117--129, New York, NY,
+  USA, 2015. ACM.
+
+\bibitem{Xiong:2013:AFI:2482626.2482635}
+J.~Xiong and K.~Jamieson.
+\newblock Arraytrack: A fine-grained indoor location system.
+\newblock In {\em Proceedings of the 10th USENIX Conference on Networked
+  Systems Design and Implementation}, nsdi'13, pages 71--84, Berkeley, CA, USA,
+  2013. USENIX Association.
+
+\bibitem{Yang:2014:TRT:2639108.2639111}
+L.~Yang, Y.~Chen, X.-Y. Li, C.~Xiao, M.~Li, and Y.~Liu.
+\newblock Tagoram: Real-time tracking of mobile rfid tags to high precision
+  using cots devices.
+\newblock In {\em Proceedings of the 20th Annual International Conference on
+  Mobile Computing and Networking}, MobiCom '14, pages 237--248, New York, NY,
+  USA, 2014. ACM.
 
 \bibitem{yun:turning}
 S.~Yun, Y.-C. Chen, W.~Mao, and L.~Qiu.

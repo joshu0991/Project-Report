@@ -78,7 +78,13 @@ AAmouse uses inaudible sound wave that operates above 17kHz.
 Researches indicate that human being cannot hear the sound wave above
 17kHz. However, current commercial speakers support those frequencies.
 The unique property of AAmouse is that it can operates in our daily 
-devices and it does not require any specialized hardware.
+devices and it does not require any specialized hardware. A system
+that uses mobile device to track its movement can offer a variety
+of usage. User would be able to control the appliance anywhere they
+want by carrying their mobile devices and such system can also 
+enable user to have a better user experience than the traditional
+remote controller. Moreover, mobile devices have IMU sensors built in,
+which can also be used to aid the accuracy of the tracking result.
 
 The original AAmouse uses STFT, Doppler shift, maximum ratio 
 combining (MRC) Kalman filter, and 
@@ -112,9 +118,61 @@ includes all the technical details of the implementation. We evaluated
 the system in section \ref{evaluation}.
 
 \section{Related Work} \label{related_work}
-State of the art techniques in literature, and how they are
-related to the work you’ve done.  This should not exceed half
-page
+AAmouse is the first tracking system using acoustic signals. It uses
+the unused inaudible sound wave that are available in commercial 
+devices.
+Other
+than AAmouse, some other works also utilize acoustic signals. 
+CAT \cite{Mao:2016:HAM:2973750.2985617} propose a high precision acoustic tracking using the combination of FMCW with Doppler shift.
+It modifies the traditional FMCW which sends a chirp signal and 
+applied the modified FMCW to a distributed system. Then it combines 
+with Doppler shift to refine the results. The evaluation shows that
+this system outperforms AAmouse.
+Wang \cite{Wang:2016:DGT:2973750.2973764}
+proposed a device free tracking using inaudible sound wave phase 
+information. This work differs from previous ones in the fact that it
+does not track the movement of a device, instead, it tracks the
+movement of the finger. Such device free tracking will have more
+applications. For example, it can help to control the smart watch,
+and user can wear gloves.
+FinerIO 
+\cite{Nandakumar:2016:FUA:2858036.2858580} proposed a tracking system
+using OFDM and its echo profile. It is also a device free 
+tracking system.
+
+In RF-based schemes, ArrayTrack \cite{Xiong:2013:AFI:2482626.2482635}
+uses WiFi to realize fine-grained tracking system with a median error of 23 cm using 16 antennas. RF-IDraw 
+\cite{Vasisht:2014:RVT:2645884.2645889} 
+adopts 8 RFID antennas with different spacing. This system has the
+median error of 3.7 cm. WiDraw \cite{Sun:2015:WEH:2789168.2790129}
+utilize the angle of arrive(AoA) based on CSI to enable hand-free
+drawing. Its median error is 5cm when sing 25 WiFi transmitters.
+mTrack \cite{Wei:2015:MHP:2789168.2790113}
+has a high accuracy using 60 GHz RF signals.
+Tagoram \cite{Yang:2014:TRT:2639108.2639111} 
+is also a RFID based tracking system that utilizes
+commercial off-the-shelf devices. Its median error is 12 cm.
+Compared with RF based tracking systems, audio tracking can achieve
+a fine-grained system with high accuracy in mm level.
+
+IMU sensors can also be used for localization tracking. 
+For example,
+Microsoft X-box Kinect
+uses depth sensor and
+Nintendo Wii 
+uses infrared cameras to track. Both system works for line-of-sight
+environment only and they suffer from error accumulation. 
+Li \cite{Li:2012:RAI:2370216.2370280}
+uses acceleration data from accelerator for localization
+tracking. However, it occurs significant error from measurement.
+IMU sensor can also be used to improve the tracking result.
+Zee \cite{Rai:2012:ZZC:2348543.2348580}
+uses such approach to aid the WiFi tracking accuracy. 
+Compared
+with sensor based tracking systems, audio tracking has a lower 
+signal processing cost and it supports condition other than line-
+of-sight. 
+
 
 \section{Applications} \label{applications}
 IoT devices becomes more and more popular nowadays. Some appliances
@@ -123,7 +181,7 @@ had before. Merely using a remote controller with buttons cannot meet
 the expected user experience offered by those appliances. A mouse has
 been on of the best design for controllers. It enables a high level of 
 freedom of controlling the devices. There are recently mouse developed
-for smart TV. 
+for smart TV to allow users have a better exploration experience. 
 
 A traditional mouse requires a smooth surface to operate, which is 
 feasible for a typical PC. However, when it comes to the smart TV
@@ -136,6 +194,8 @@ applied in this scenario by enabling a mouse in the air on the go.
 User would be able to control the appliance wherever they want with
 rich control options.
 
+
+
 \section{Roles and collaboration} \label{roles and collaboration}
 We discussed the project implementation details together, including
 what we should implement, what the time line would be, what the issues
@@ -144,22 +204,82 @@ we need, such as MRC, Kalman filter, STFT, Doppler Shift, and the
 particle filter, we discussed the implementation procedure, 
 potential issues, and the possible solutions.
 
-Mingrui Han: Implement the system in Android tablet. Review and discuss matlab code. 
-Research and implement third party tools which java does
-not have.  
+Mingrui Han: Implement the system in Android tablet. Review and discuss matlab code. Implement MRC, distance calculation, following
+the matlab code. 
+Research and implement FFT, signal filter, and other third party 
+tools which java does not have.  
 
 Joshua Lilly:
 
 \section{Project Overview} \label{project_overview}
-This section should provide an overview of the project, espe-
-ically compared to the original work.  Please include below
-subsections.   You  are  free  to  add  or  reorder  sections,  but
-should not remove any.
+We implement a modified version of AAmouse in two platforms, PC
+(matlab) and Android tablet. Our project is different than the 
+original work in some way but it has the same concept as AAmouse.
+The key techniques used in AAmouse are, Doppler shift, distance
+calculation,  maximum ratio combining (MRC), Kalman filter,
+calibration phase, and particle filter. As we implement the work,
+we found that the paper omits some detail for implementation. 
+Compared with AAmouse, we implemented a modified version of the 
+system. Our system uses Doppler shift, distance calculation, 
+MRC, and signal smoothing filter. Detail will be given in the later 
+sections. 
 
 \subsection{Original Work}
-Briefly  summarize  the  original  work.   You  may  use  your
-critique  but  please  adjust  to  fit  into  the  project  context.
-Should not exceed half a page
+The key idea of the original work is using Doppler shift as an
+estimate of the device velocity. The Doppler shift is a well known
+effect where the frequency of a signal changes as a sender or a 
+receiver moves. In our case, the sender is fixed, so we only 
+consider the movement of the receiver. Doppler shift is observed
+in both RF wave and acoustic wave. Because of its speed propagation
+speed and narrower bandwidth, 
+acoustic signal can achieve a higher accuracy than RF signal.
+The detailed equation is shown below.
+
+\begin{equation}
+v= \frac {F^s}{F} \times C
+\end{equation}
+
+\begin{math} F \end{math} denotes the original frequency of the
+signal. \begin{math} F^s \end{math} is the frequency shift of the
+signal. \begin{math} C \end{math} is the signal speed, which is the
+sound wave speed in this case. After the calculation of the velocity
+\begin{math} v \end{math}, AAmouse integrates it 
+with time to obtain the distance of the device movement.
+
+\begin{equation}
+D = D + v \times t
+\end{equation}
+
+In 1D tracking, \begin{math} D \end{math} is the result. In 2D
+tracking, \begin{math} D \end{math} is the distance for each
+speaker. We have 2 distances of the device to each speaker and
+we have the distance between the two speakers. We will be able to
+track the device movement using basic triangle properties. 
+
+To improve the accuracy, AAmouse uses maximum ratio combining (MRC). 
+Measuring from a single frequency may not be reliable. Thus, AAmouse
+sends the signal in 10 frequencies, with a guarding frequency of 
+200Hz. Then it applied MRC to average the received signal weighted
+by the inverse of the noise variance. After performing MRC,
+AAmouse adopts Kalman filter to smooth the estimation with noise
+covariance and measurement noise covarince both to be 0.00001.
+
+To find the distance between the speakers, AAmouse introduced a 
+Doppler shift based calibration process. 
+The TV emits the inaudible sound and user scans the TV with his hands
+holding the device. The users start from the left end of the TV to the
+right end of the TV.
+It finds the points where the 
+value of Doppler shift change from positive to negative. Those points
+indicate the time that uses spent to move the device between the
+speakers. 
+
+AAmouse finds the initial device location by applying a particle 
+filter. It generates many particles uniformly distributed in the 
+area. Each particle indicates a possible initial location of the
+device. In the next Doppler shift interval, the system checks the 
+device movement of each particle. If the movement is not feasible,
+such particle will be filtered out.
 
 \subsection{Project Summary}
 Summarize  what  you  have  achieved  in  your  project,  espe-

@@ -55,29 +55,29 @@ More and more IoT devices emerge into our daily life, aiming to ease
 our living style. Those devices such as smart TV, smart fridge
 will have more functionality to provide a better user experience.
 A traditional controller that uses buttons cannot meet the expectation
-of the usage. In this paper, we implement AAmouse \cite{yun:turning}, a system that tracks the device using acoustic sensing. It enables
+of the usage. In this paper, we implement AAMouse \cite{yun:turning}, a system that tracks the device using acoustic sensing. It enables
 users to use their mobile devices as the controller to
-draw freely in the air. AAmouse adopts inaudible sound wave and Doppler shift effect to track the device movement. Human being cannot
+draw freely in the air. AAMouse adopts inaudible sound wave and Doppler shift effect to track the device movement. Human being cannot
 hear the sound wave frequency above 17kHz. However, these frequencies 
-are supported in commercial devices. AAmouse takes advantage of this
-unused frequencies. Also, AAmouse does not require specialized 
-hardware to operate. We implemented AAmouse in two platforms, PC and Android tablet. To refine the tracking result, we applied maximum
+are supported in commercial devices. AAMouse takes advantage of this
+unused frequencies. Also, AAMouse does not require specialized 
+hardware to operate. We implemented AAMouse in two platforms, PC and Android tablet. To refine the tracking result, we applied maximum
 ratio combining and signal smoothing filter. Then we conducted the 
-evaluation experiment. The actual error is larger than the AAmouse
+evaluation experiment. The actual error is larger than the AAMouse
 paper. We also discussed the possible reason of the error. In 
 addition, the difference between our implementation and the 
 original work is discussed in this work as well.
 \end{abstract}
 
-\keywords{AAmouse, acoustic sensing, inaudible sound wave}
+\keywords{AAMouse, acoustic sensing, inaudible sound wave}
 
 \section{Introduction}
-In this work, we implemented AAmouse, a system that utilize 
+In this work, we implemented AAMouse, a system that utilize 
 acoustic signal and Doppler shift effect to track the device movement.
-AAmouse uses inaudible sound wave that operates above 17kHz.
+AAMouse uses inaudible sound wave that operates above 17kHz.
 Researches indicate that human being cannot hear the sound wave above
 17kHz. However, current commercial speakers support those frequencies.
-The unique property of AAmouse is that it can operates in our daily 
+The unique property of AAMouse is that it can operates in our daily 
 devices and it does not require any specialized hardware. A system
 that uses mobile device to track its movement can offer a variety
 of usage. User would be able to control the appliance anywhere they
@@ -86,7 +86,7 @@ enable user to have a better user experience than the traditional
 remote controller. Moreover, mobile devices have IMU sensors built in,
 which can also be used to aid the accuracy of the tracking result.
 
-The original AAmouse uses STFT, Doppler shift, maximum ratio 
+The original AAMouse uses STFT, Doppler shift, maximum ratio 
 combining (MRC) Kalman filter, and 
 particle filter. Our system is different than the original work with
 minor changes. 
@@ -118,16 +118,16 @@ includes all the technical details of the implementation. We evaluated
 the system in section \ref{evaluation}.
 
 \section{Related Work} \label{related_work}
-AAmouse is the first tracking system using acoustic signals. It uses
+AAMouse is the first tracking system using acoustic signals. It uses
 the unused inaudible sound wave that are available in commercial 
 devices.
 Other
-than AAmouse, some other works also utilize acoustic signals. 
+than AAMouse, some other works also utilize acoustic signals. 
 CAT \cite{Mao:2016:HAM:2973750.2985617} propose a high precision acoustic tracking using the combination of FMCW with Doppler shift.
 It modifies the traditional FMCW which sends a chirp signal and 
 applied the modified FMCW to a distributed system. Then it combines 
 with Doppler shift to refine the results. The evaluation shows that
-this system outperforms AAmouse.
+this system outperforms AAMouse.
 Wang \cite{Wang:2016:DGT:2973750.2973764}
 proposed a device free tracking using inaudible sound wave phase 
 information. This work differs from previous ones in the fact that it
@@ -173,7 +173,6 @@ with sensor based tracking systems, audio tracking has a lower
 signal processing cost and it supports condition other than line-
 of-sight. 
 
-
 \section{Applications} \label{applications}
 IoT devices becomes more and more popular nowadays. Some appliances
 such as smart TV, smart fridge offer more functions than we ever
@@ -194,8 +193,6 @@ applied in this scenario by enabling a mouse in the air on the go.
 User would be able to control the appliance wherever they want with
 rich control options.
 
-
-
 \section{Roles and collaboration} \label{roles and collaboration}
 We discussed the project implementation details together, including
 what we should implement, what the time line would be, what the issues
@@ -204,22 +201,21 @@ we need, such as MRC, Kalman filter, STFT, Doppler Shift, and the
 particle filter, we discussed the implementation procedure, 
 potential issues, and the possible solutions.
 
-Mingrui Han: Implement the system in Android tablet. Review and discuss matlab code. Implement MRC, distance calculation, following
-the matlab code. 
-Research and implement FFT, signal filter, and other third party 
-tools which java does not have.  
+Joshua Lilly: Signal processing portion in MATLAB, Maximal Ratio Combining, Outlier removal Kalman Filtering, Distance and point Calculation.
 
-Joshua Lilly:
+Mingrui Han: Implement the system in Android tablet. Review and discuss matlab code. Implement MRC, distance calculation, following the matlab code. 
+Research and implement FFT, signal filter, and other third party tools which java 
+does not have. 
 
 \section{Project Overview} \label{project_overview}
-We implement a modified version of AAmouse in two platforms, PC
+We implement a modified version of AAMouse in two platforms, PC
 (matlab) and Android tablet. Our project is different than the 
-original work in some way but it has the same concept as AAmouse.
-The key techniques used in AAmouse are, Doppler shift, distance
+original work in some way but it has the same concept as AAMouse.
+The key techniques used in AAMouse are, Doppler shift, distance
 calculation,  maximum ratio combining (MRC), Kalman filter,
 calibration phase, and particle filter. As we implement the work,
 we found that the paper omits some detail for implementation. 
-Compared with AAmouse, we implemented a modified version of the 
+Compared with AAMouse, we implemented a modified version of the 
 system. Our system uses Doppler shift, distance calculation, 
 MRC, and signal smoothing filter. Detail will be given in the later 
 sections. 
@@ -243,7 +239,7 @@ v= \frac {F^s}{F} \times C
 signal. \begin{math} F^s \end{math} is the frequency shift of the
 signal. \begin{math} C \end{math} is the signal speed, which is the
 sound wave speed in this case. After the calculation of the velocity
-\begin{math} v \end{math}, AAmouse integrates it 
+\begin{math} v \end{math}, AAMouse integrates it 
 with time to obtain the distance of the device movement.
 
 \begin{equation}
@@ -256,15 +252,15 @@ speaker. We have 2 distances of the device to each speaker and
 we have the distance between the two speakers. We will be able to
 track the device movement using basic triangle properties. 
 
-To improve the accuracy, AAmouse uses maximum ratio combining (MRC). 
-Measuring from a single frequency may not be reliable. Thus, AAmouse
+To improve the accuracy, AAMouse uses maximum ratio combining (MRC). 
+Measuring from a single frequency may not be reliable. Thus, AAMouse
 sends the signal in 10 frequencies, with a guarding frequency of 
 200Hz. Then it applied MRC to average the received signal weighted
 by the inverse of the noise variance. After performing MRC,
-AAmouse adopts Kalman filter to smooth the estimation with noise
+AAMouse adopts Kalman filter to smooth the estimation with noise
 covariance and measurement noise covarince both to be 0.00001.
 
-To find the distance between the speakers, AAmouse introduced a 
+To find the distance between the speakers, AAMouse introduced a 
 Doppler shift based calibration process. 
 The TV emits the inaudible sound and user scans the TV with his hands
 holding the device. The users start from the left end of the TV to the
@@ -274,7 +270,7 @@ value of Doppler shift change from positive to negative. Those points
 indicate the time that uses spent to move the device between the
 speakers. 
 
-AAmouse finds the initial device location by applying a particle 
+AAMouse finds the initial device location by applying a particle 
 filter. It generates many particles uniformly distributed in the 
 area. Each particle indicates a possible initial location of the
 device. In the next Doppler shift interval, the system checks the 
@@ -282,10 +278,39 @@ device movement of each particle. If the movement is not feasible,
 such particle will be filtered out.
 
 \subsection{Project Summary}
-Summarize  what  you  have  achieved  in  your  project,  espe-
-cially compared to the original work.  What parts were and
-were  not  implemented,  performance  gap  from  the  original
-work, etc.
+We have implemented a modified version of AAMouse. Our system includes the key concept
+of the original work, which is the Doppler shift. Doppler shift in our system is 
+basically the same as it in the AAMouse, except in the Android part, where there is no
+STFT library available. Original AAMouse uses STFT to find the peak frequencies of the
+received signals. Our PC implementation does the same procedure as AAMouse, but our 
+Android tablet uses FFT instead. Basic concept of Doppler shift is given in the previous 
+section. Implementation detail will be given in section \ref{technical_details}.
+
+To refine the tracking result, original AAMouse uses maximum ratio combining. We also
+implemented such technique in both our system. We sent the signal in 10 different
+frequencies and average the received signal weighted by the inverse of the signal noise.
+The implementation detail will be given in section \ref{technical_details}.
+
+Then AAMouse applied Kalman filter after the MRC to further smooth the signal.
+We did not implement Kalman filter 
+/***************
+include the reason why we did not use it, and what is used in PC part.
+***************/
+In Android side, there are not a lot of options to choose from. For example, 
+Kalman filter does not exist in Android platform.
+We used a signal
+filter from \cite{SignalFilter}, called OneEuroFilter, to smooth the signal.
+
+The distance calculation portion of the work are the same as AAMouse. We calculated the
+distance in each axis and then calculated the intersection of the two circles from two
+speakers with the radius as the distance calculated before. Section
+\ref{technical_details} will discuss the detail of the calculation.
+
+AAMouse implements particle filter to find the initial location of the device. Due to the 
+high complexity of particle filter concept and the missing detail of the implementation
+in the original paper. We were not able to replicate the particle filter from AAMouse.
+Therefore, our system does not have the particle filter implemented, which could cause
+the system to be error-prone.
 
 \section{Design and Implementation} \label{design_and_implementation}
 This should be the main part of the report.  It should in-
@@ -298,13 +323,18 @@ cation,  hardware,  software,  and so on.  If possible,  include
 pictures and figures to be illustrative.  Compare your setup
 to the original paper, and explain why you did so
 
-\subsection{Technical Details}
+\subsection{Technical Details} \label{technical_details}
 All  the  technical  details  related  to  your  project  should  be
 placed  here  including,  but  not  limited  to,  techniques  and
 methodologies involved, theories behind thee, how they were
 implemented, what was the difference from the originial pa-
 per,  what  was  not  mentioned  in  the  paper  and  how  you
 overcame it, and so on.  Be specific.
+
+/****************
+Include doppler shift parameters, MRC, distance calculation, signal filter
+*****************/
+
 
 \subsection{Lessons learned}
 What are the knowledge obtained from this project? Clearly
@@ -329,7 +359,7 @@ simply enlist the results, but explain them and provide anal-
 ysis/insights obtained from the implementation and exper-
 iments.  For example, why does your project performs bet-
 ter/worse than what is reported in the original paper?  Why
-does it perform differenty under various scenarios?  Any un-
+does it perform differently under various scenarios?  Any un-
 expected results are found, and why
 
 \subsection{Potential Improvements}

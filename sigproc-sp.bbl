@@ -1,5 +1,10 @@
 \begin{thebibliography}{10}
 
+\bibitem{SignalFilter}
+R.~de~Courville.
+\newblock Signal filter (beta).
+\newblock https://github.com/SableRaf/signalfilter, 2015.
+
 \bibitem{Li:2012:RAI:2370216.2370280}
 F.~Li, C.~Zhao, G.~Ding, J.~Gong, C.~Liu, and F.~Zhao.
 \newblock A reliable and accurate indoor localization method using phone

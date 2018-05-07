@@ -313,15 +313,24 @@ Therefore, our system does not have the particle filter implemented, which could
 the system to be error-prone.
 
 \section{Design and Implementation} \label{design_and_implementation}
-This should be the main part of the report.  It should in-
-clude below subsections.  Feel free to add (do not remove)
-subsections and reorder them.
+We implemented the system in two platforms, PC using matlab and Android using Java. In 
+this section, we will discuss the implement details of our system. It includes the 
+hardware we used, the experimental setup we used, the implementation approach we applied,
+the possible problem we faced and the solutions we took.
 
 \subsection{Setup}
+/****************
+I added two section for Android, so you can use below two section for you.
+*****************/
 Scenarios  and  setup  of  your  implementation,  including  lo-
 cation,  hardware,  software,  and so on.  If possible,  include
 pictures and figures to be illustrative.  Compare your setup
 to the original paper, and explain why you did so
+
+/****************
+Include some figures for best result, just the one from
+the slides are fine. I used the same setup with yours.
+*****************/
 
 \subsection{Technical Details} \label{technical_details}
 All  the  technical  details  related  to  your  project  should  be
@@ -336,6 +345,36 @@ Include doppler shift parameters, MRC, distance calculation, signal filter
 *****************/
 
 
+\subsection{Setup-Android}
+We used one Samsung SM-T320 tablet and two Logitech S-120 speakers for experiment 
+hardware. The experiment setup is the same as the one mentioned above for our PC 
+implementation. We keep the distance between the speaker to the device to be one meter
+and the distance between two speakers also to be one meter. 
+
+\subsection{Technical Details-Android}
+The sampling rate we used is the same as the original paper, 44.1 KHz. It is also the 
+default sampling rate supported by the device. By default, we uses 1759 as the buffer
+size to store the audio samples. Such size is chosen by the convention from the 
+Android AudioRecorder class. 
+Because in Android system, there is no signal processing libraries to use, we cannot 
+call STFT function in one line as we did in PC side. Thus the first issue is how to 
+calculate frequency shift in Doppler shift. We used a third party FFT tool from 
+\cite{FFT}. This FFT function will return the same number of points as the buffer size
+of the stored signal. The even index of the FFT point are the imaginary part and the odd 
+index of the FFT point are the real part. We then found the frequencies with the greatest
+FFT value and subtracted it with the sending frequency to obtain the frequency shift. 
+Then we are able to calculate the velocity. 
+
+To improve the accuracy of the system, we also implement MRC in Android side, the 
+technical detail is the same as above for the PC section. After applying MRC, the original
+work uses Kalman filter to smooth the data. However, there is no such filter available in
+Android system. Instead, we applied a third party filter from
+\cite{SignalFilter} called OneEuroFilter to smooth the data.
+
+After the post processing, we were able to get the frequency shift in each axis, averaging
+five sound frequencies. Then we calculate the distance using the same equations mentioned
+above.
+
 \subsection{Lessons learned}
 What are the knowledge obtained from this project? Clearly
 state what you have learned from this project, beyond what
@@ -345,6 +384,20 @@ could not fix it, describe what you have tried, why you were
 unable to solve it, and your hypothesis on what would be the
 cause.  If you were not able to implement the entire system
 in the originial paper, explain why.
+/****************
+You can include your part here, before mine. I think we can use the same section.
+*****************/
+
+In Android side, using buffer size of 1759 is no doubt too small for FFT. Such value
+will lead to a very low frequency resolution, which will cause the distance calculation
+to be very inaccurate. Same theory is also mentioned in the original work. The correct
+buffer size should be 44100. However, this will not work for the two following reasons.
+First, such number of the buffer size will cause the app to stop working as we tested 
+using the tablet. Second, even if the app will not crash, this huge value will take one
+second to record. A long FFT does not allow us to track the device in real time. In one
+second, the device may move to other location. As a result, we think the small buffer size
+is the cause of the system tracking error, even though we were able to obtain the
+frequency shift. An evaluation will be given in the next section.
 
 \section{EVALUATION} \label{evaluation}
 Performance evaluation and potential improvement.  Should

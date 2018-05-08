@@ -353,9 +353,9 @@ and the distance between two speakers also to be one meter.
 
 \subsection{Technical Details-Android}
 The sampling rate we used is the same as the original paper, 44.1 KHz. It is also the 
-default sampling rate supported by the device. By default, we uses 1759 as the buffer
-size to store the audio samples. Such size is chosen by the convention from the 
-Android AudioRecorder class. 
+default sampling rate supported by the device. By default, we uses 44,100 as the buffer
+size to store the audio samples. Such size is chosen in order to provide the fine-grained
+frequency resolution.
 Because in Android system, there is no signal processing libraries to use, we cannot 
 call STFT function in one line as we did in PC side. Thus the first issue is how to 
 calculate frequency shift in Doppler shift. We used a third party FFT tool from 
@@ -386,18 +386,25 @@ cause.  If you were not able to implement the entire system
 in the originial paper, explain why.
 /****************
 You can include your part here, before mine. I think we can use the same section.
+why we did not use kalman filter, why we did not implement particle filter
 *****************/
 
-In Android side, using buffer size of 1759 is no doubt too small for FFT. Such value
+In Android side, The initial buffer size is chosen as 1759, which is the minimum
+buffer size by default calculation using Android AudioRecorder class. 
+Using buffer size of 1759 is no doubt too small for FFT. Such value
 will lead to a very low frequency resolution, which will cause the distance calculation
 to be very inaccurate. Same theory is also mentioned in the original work. The correct
-buffer size should be 44100. However, this will not work for the two following reasons.
-First, such number of the buffer size will cause the app to stop working as we tested 
-using the tablet. Second, even if the app will not crash, this huge value will take one
+buffer size should be 44100. However, this value did not work at the first place and 
+it will lead the app to stop working immediately. One suspicious cause is the intensive
+computing cost inside the while loop for the real time signal processing. Then we 
+optimized the code to compute the maximum frequencies in linear time. This procedure 
+allow the buffer size to be set as 44100. The app will run for approximate 15 seconds
+before it crushes.
+Even if the app will work for 15 seconds, this huge buffer size value will take one
 second to record. A long FFT does not allow us to track the device in real time. In one
-second, the device may move to other location. As a result, we think the small buffer size
-is the cause of the system tracking error, even though we were able to obtain the
-frequency shift. An evaluation will be given in the next section.
+second, the device may move to other location. As a result, even though we were able to
+obtain the fine grained frequency shift using our Android device, the tracking result 
+may not be accurate due to the long FFT.
 
 \section{EVALUATION} \label{evaluation}
 Performance evaluation and potential improvement.  Should
@@ -418,6 +425,16 @@ expected results are found, and why
 \subsection{Potential Improvements}
 From  your  experiment  experience,  what  do  you  think  can
 be done to improve the performance.  Please justify
+
+/****************
+I added some part of mine below.
+*****************/
+
+In Android side, we could use STFT packet instead of FFT to increase the accuracy
+because a long FFT cannot track the device in real time. However, currently there is 
+no STFT library available for Android platform. We could implement our own STFT. 
+The original work applied STFT to use 1764 audio samples to still achieve 1 Hz frequency
+resolution.
 
 %
 % The following two commands are all you need in the

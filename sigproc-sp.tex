@@ -27,6 +27,8 @@
 % For tracking purposes - this is V3.1SP - APRIL 2009
 
 \documentclass{acm_proc_article-sp}
+\usepackage[]{algorithm2e}
+\usepackage{graphicx}
 
 \begin{document}
 
@@ -291,11 +293,16 @@ implemented such technique in both our system. We sent the signal in 10 differen
 frequencies and average the received signal weighted by the inverse of the signal noise.
 The implementation detail will be given in section \ref{technical_details}.
 
-Then AAMouse applied Kalman filter after the MRC to further smooth the signal.
-We did not implement Kalman filter 
-/***************
-include the reason why we did not use it, and what is used in PC part.
-***************/
+Next, AAMouse applied Kalman Filtering after the MRC to further smooth the signal.
+Our final evaluation does not employ the use of the Kalman Filtering, due to the fact that the authors did not specify the state transition function used in the Kalman Filter, which is needed by MATLAB. We did make an attempt using van der Pol state estimation, where the system is modeled as two non-linear ordinary differential equations [14].
+$$
+\dot{x_1} = x_2
+$$
+$$
+\dot{x_2} = (1-x_1^2) x_2-x_1
+$$
+
+but this seemed to produce slightly worse results in the empirical evaluation. Which would suggest this is not the evaluation function the authors chose, or there is a bug in the implementation. 
 In Android side, there are not a lot of options to choose from. For example, 
 Kalman filter does not exist in Android platform.
 We used a signal
@@ -318,32 +325,40 @@ this section, we will discuss the implement details of our system. It includes t
 hardware we used, the experimental setup we used, the implementation approach we applied,
 the possible problem we faced and the solutions we took.
 
-\subsection{Setup}
-/****************
-I added two section for Android, so you can use below two section for you.
-*****************/
-Scenarios  and  setup  of  your  implementation,  including  lo-
-cation,  hardware,  software,  and so on.  If possible,  include
-pictures and figures to be illustrative.  Compare your setup
-to the original paper, and explain why you did so
+\subsection{Setup PC}
+The PC implementation is implemented in MATLAB using a Macbook with 4 Gigabytes of memory and an Intel I5 processor with a clock speed 2.8 GHz. A simple microphone (Snowball Black Ice) is used for collection of the audio samples and two Logitech Z200 speakers are used to play the sounds. The distance between the speakers is measured to be 1 meter and the initial starting location for the microphone is approximately 1 meter from both speakers.
 
-/****************
-Include some figures for best result, just the one from
-the slides are fine. I used the same setup with yours.
-*****************/
+\begin{figure}[h]
+\caption{Experiment setup for PC}
+\includegraphics[width=9cm, height=9cm]{PCSetup}
+\end{figure}
 
-\subsection{Technical Details} \label{technical_details}
-All  the  technical  details  related  to  your  project  should  be
-placed  here  including,  but  not  limited  to,  techniques  and
-methodologies involved, theories behind thee, how they were
-implemented, what was the difference from the originial pa-
-per,  what  was  not  mentioned  in  the  paper  and  how  you
-overcame it, and so on.  Be specific.
+\subsection{Technical Details Sound Generation} \label{technical_details Sound Mixing}
+In order to generate sounds MATLAB is used to generate 10 Sinusoidal waves, 5 for the left speaker and 5 for the right, each spaced 200 Hz apart. The process for generating the sounds can be seen in Algorithm 1.
 
-/****************
-Include doppler shift parameters, MRC, distance calculation, signal filter
-*****************/
+\begin{algorithm}
+\KwData{amp=1;}
+\KwData{fs=80000;}
+\KwData{duration=50;}
+\KwData{values=0:1/fs:duration;}
+\setlength{\parindent}{0cm}
+\For { frequency from 18000 to 18800 }
+{$wave\_left = wave\_left + amp*sin(2*pi*frequency*values);$
+$frequency += 200;$}
+\For { frequency from 19000 to 19800 }
+{$wave\_right = wave\_right + amp*sin(2*pi*frequency*values);$
+$frequency += 200;$}
 
+$
+combined = [wave\_left(:), wave\_right(:)];
+$
+$write(file, combined);$
+
+\caption{How to generate Sinusoidal inaudible sounds}
+\end{algorithm}
+
+\subsection{Technical Details Receiver Design} \label{technical_details Receiver Design}
+The receiver which processes the audio signals uses a continuous loop to run for some variable amount of time. Inside of the loop we take 44100 samples from the microphone and perform a Short Time Fourier Transform with 44100 points. This is also applies a Hamming window with 1764 points and an overlap of 50 percent. At this point the signal consists of all of the 10 frequencies transmitted from the speakers. We next perform maximal ratio combining by imposing the idea of a channel. We do this by imposing a window of 50 Hz around the center frequencies of each of the 10 frequencies we generated. Then for each channel we estimate the noise variance by taking the sum of all of the signals outside of where we expect the signal to fall and then averaging this value by the number of points used. We then weight each channel by the inverse of this value, which is a rough approximation of the inverse of the noise variance. Next the frequencies are split into two sets.  The weighted signals are then averaged with the other signals in their set and the the frequency exhibiting the strongest power is extracted from each set. We use these value to calculate the Doppler shift by finding the original frequency value it is closest to and taking the difference. If Doppler shift that is generated is greater than 10 Hz we throw this point out. In the event we throw the point out, we extract the maximum power signal in each channel and calculate the difference between each value and it's closest original frequency value. Then the Doppler shift calculation that is closest to the previous loops Doppler shift is selected as the Doppler shift. We specifically note that this technique of throwing out points in the event the Doppler shift is greater than 10 Hz may cause a biasing towards higher values for future calculations in the event no channel yields a Doppler shift estimate that is less than 10 Hz. Which is a potential source of error, however, the probability that this event will occur is somewhat small given the fact there are 10 frequency values.  The Doppler shift obtained is then used to estimate a distance between each of the speakers. Then given distance we estimate the angle between the speaker and the microphone and use that angle to then calculate an x y point. We also note that this point is the intersection of two concentric circles, each with their center at each of the speakers. This means there are potentially two intersections. However, for simplicity and because the second second intersection point tends to cause a larger distance jump from the microphone we do not calculate the second intersection point in the event one exists. 
 
 \subsection{Setup-Android}
 We used one Samsung SM-T320 tablet and two Logitech S-120 speakers for experiment 
@@ -376,19 +391,7 @@ five sound frequencies. Then we calculate the distance using the same equations 
 above.
 
 \subsection{Lessons learned}
-What are the knowledge obtained from this project? Clearly
-state what you have learned from this project, beyond what
-is on the original paper. This includes practical issues you’ve
-faced, how you were able to troubleshoot them.  Even if you
-could not fix it, describe what you have tried, why you were
-unable to solve it, and your hypothesis on what would be the
-cause.  If you were not able to implement the entire system
-in the originial paper, explain why.
-/****************
-You can include your part here, before mine. I think we can use the same section.
-why we did not use kalman filter, why we did not implement particle filter
-*****************/
-
+The knowledge we obtained from the project, specifically with the PC implementation in mind is we learned numerous pieces of signal processing theory, including why we would want to use a STFT as opposed to an FFT. We also learned tons about spacial and frequency diversity when we attempted to implement the maximal ratio combining portion of the project since most of the examples for diversity combining techniques center around spacial diversity as opposed to frequency diversity. Despite learning this, we still are yet to find a good example on Maximal Ratio Combining  for frequency diversity. Hence it is possible our implementation is theoretically flawed. We also learned how to implement the Kalman filter in MATLAB, which is not necessarily a simple task despite there being numerous resources on how to do it. Modeling the problem as a state transition function turns out to require even more knowledge of signal processing, beyond what even to this point we have obtained. Despite this we did make an attempt to figure out how to come up with a model for our problem, unfortunately more research is necessary to build the Kalman filtering into the code. One piece of the of the project which we did not attempt to implement was the particle filtering for estimation of the starting location of the microphone. This is our largest source of error by far and is the primary reason for regular bad results. We further hypothesize that we could obtain significantly better results for the project if we would have implemented this portion.
 In Android side, The initial buffer size is chosen as 1759, which is the minimum
 buffer size by default calculation using Android AudioRecorder class. 
 Using buffer size of 1759 is no doubt too small for FFT. Such value
@@ -407,29 +410,32 @@ obtain the fine grained frequency shift using our Android device, the tracking r
 may not be accurate due to the long FFT.
 
 \section{EVALUATION} \label{evaluation}
-Performance evaluation and potential improvement.  Should
-include below subsections.  Feel free to add (do not remove)
-subsections and reorder them.
+The evaluation was carried out on both Android and PC platforms. To evaluate the PC platform we evaluate the general ability of the platform to trace given shapes since distance will always be inaccurate due to the lack of knowing where in global space the fact we did not implement the particle filter. If one were to use distance as a metric the implementation obtains a massive error calculation. Hence the need for a more qualitative evaluation. Additionally, we note that the platform only gives a window of around 8 to 10 seconds before error in all variables, x, y theta and velocity propagates to the point where the system becomes completely incorrect and neither tracks distance nor general shape.
 %\end{document}  % This is where a 'short' article might terminate
 
 %ACKNOWLEDGMENTS are optional
-\subsection{Performance and Analysis}
-Be illustrative with graphs and figures.  However, don’t just
-simply enlist the results, but explain them and provide anal-
-ysis/insights obtained from the implementation and exper-
-iments.  For example, why does your project performs bet-
-ter/worse than what is reported in the original paper?  Why
-does it perform differently under various scenarios?  Any un-
-expected results are found, and why
+\subsection{Performance Analysis - Motion Tracking}
+In figure 1 we can see the plot of tracing a simple straight line moving the microphone toward the speakers. We see the ground truth indicated by the + mark and the actual value of the microphone as *. Additionally, the time at which the point was obtained is included in the adjacent text, where t indicates the time at which the ground truth point would be obtained and ta represents the time at which the actual points are obtained. Additionally, due to a constant error of approximately 30 cm the graph takes this into account and normalizes the result by subtracting the error. From this image we see that a majority of the points near the beginning of the test are close to the ground truth values, however, as we see time approach the end of the test where $ta > 10$ we see very poor behavior from the system. This is most likely due to the error propagation.
+\begin{figure}[h]
+\caption{Tracing line in Y direction, while holding X constant}
+\includegraphics[width=9cm, height=11cm]{TracingY}
+\end{figure}
+
+\subsection{Inaudible Tone Frequency Choices}
+Originally, we chose inaudible frequencies between 20kHz and 21.8 kHz. However, after attempting to use these frequencies it was observed that the power of the frequencies above 20kHz were very week. Due to this we switched to use the frequencies from 18kHz to 19.8kHz. The results of the PSD graphs can be seen in figures 4 and 5.
+
+\begin{figure}[h]
+\caption{PSD when using frequencies above 20kHz}
+\includegraphics[width=9cm, height=11cm]{above20}
+\end{figure}
+
+\begin{figure}[h]
+\caption{PSD when using frequencies above 18kHz to 19.8kHz}
+\includegraphics[width=9cm, height=11cm]{Below20}
+\end{figure}
 
 \subsection{Potential Improvements}
-From  your  experiment  experience,  what  do  you  think  can
-be done to improve the performance.  Please justify
-
-/****************
-I added some part of mine below.
-*****************/
-
+There are numerous potential improvements that could be made to the system in nearly every aspect. To start with a better implementation of Maximal Ratio Combining could be used, specifically one that does not discount the actual frequencies around the center of each channel for calculation of the noise variance. One other aspect for improvement is in the potential to further smooth the Doppler shift curve with Kalman Filtering; this however, would require much more research and evaluation in which transition function would best fit to the problem. Another improvement is answering the question of whether or not we actually need to calculate a global points in global space. One possible implementation could define both global and local coordinate spaces, where the local coordinate axis is with respect to the microphone and the global axis is with respect to the speakers. Then a method for deriving points in the global coordinate axis involves multiplying the result in the local coordinate axis by the transpose of the Jaobian. This idea comes from kinematics in robotic motion planning. Finally, one large issue we ran into when performing the evaluation is that the time to process the data in real time reached a point where the data that was being reported was old and mismatched in the timing. This is because the time it takes to complete one of the loops in the MATLAB program is approximately 1 second. The authors of the paper explicitly mention that 1 second is too long of a window in time for results to be accurate. One possible solution to this is to gather the data in a matrix in MATLAB for each instance of time and then calculate the x y pairs in a non-real time fashion. 
 In Android side, we could use STFT packet instead of FFT to increase the accuracy
 because a long FFT cannot track the device in real time. However, currently there is 
 no STFT library available for Android platform. We could implement our own STFT. 

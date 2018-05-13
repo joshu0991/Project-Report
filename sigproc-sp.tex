@@ -29,6 +29,8 @@
 \documentclass{acm_proc_article-sp}
 \usepackage[]{algorithm2e}
 \usepackage{graphicx}
+\usepackage{caption}
+\usepackage{subcaption}
 
 \begin{document}
 
@@ -63,7 +65,7 @@ draw freely in the air. AAMouse achieves this with inaudible sound waves and Dop
 hear sounds above 17kHz. However, these frequencies 
 are supported in commercial devices. AAMouse takes advantage of the
 unused frequencies to do the tracing. Also, AAMouse does not require specialized 
-hardware to operate. We implemented AAMouse in two platforms, on a PC using MATLAB and an Android tablet. To refine the tracking result, we applied Maximum
+hardware to operate. We implemented AAMouse on   s two platforms, on a PC using MATLAB and an Android tablet. To refine the tracking result, we applied Maximum
 Ratio Combining and a signal smoothing filter to achieve better accuracy. Then we conducted the 
 evaluation experiment. The actual error is larger than the AAMouse
 paper by a significant amount. We also discuss the possible reasons for the error and possible solutions. In 
@@ -79,11 +81,11 @@ acoustic signals and Doppler shift to track the device movement.
 AAMouse uses inaudible sound waves above 17kHz.
 Research indicates that human beings cannot hear the sounds above
 17kHz. However, current commercial speakers support those frequencies.
-The unique property of AAMouse is that it can operates in mobile 
+The unique property of AAMouse is that it can operates on mobile 
 devices and it does not require any specialized hardware. A system
 that uses mobile devices to track its movement can offer a variety
-of usages. User would be able to control appliances from a distance by carrying their mobile devices. Such system can also 
-enables the user to have a better user experience than the traditional
+of usages. User would be able to control appliances from a distance by carrying their mobile devices. Such a system can also 
+enable the user to have a better user experience than the traditional
 remote controller. Moreover, mobile devices have IMU sensors built in,
 which can also be used to aid the accuracy of the tracking result.
 
@@ -335,7 +337,7 @@ $write(file, combined);$
 The receiver which processes the audio signals uses a continuous loop to run for some variable amount of time. Inside of the loop we take 44100 samples from the microphone and perform a Short Time Fourier Transform with 44100 points. This also applies a Hamming window with 1764 points and an overlap of 50 percent. At this point the signal consists of all of the 10 frequencies transmitted from the speakers. We next perform MRC by imposing the idea of a channel. We do this by using a window of 50 Hz around the center frequencies of each of the 10 frequencies we generated. Then for each channel we estimate the noise variance by taking the sum of all of the signals outside of where we expect the signal to fall and then averaging this value by the number of points used. We then weight each channel by the inverse of this value, which is a rough approximation of the inverse of the noise variance. Next the frequencies are split into two sets.  The weighted signals are then averaged with the other signals in their set and the the frequency exhibiting the strongest power is extracted from each set. We use these values to calculate the Doppler shift by finding the original frequency value it is closest to and taking the difference. If Doppler shift that is generated is greater than 10 Hz we throw it out. In the event we throw the point out, we extract the maximum power signal in each channel and calculate the difference between each value and it's closest original frequency value. Then the Doppler shift calculation that is closest to the previous loop's Doppler shift is selected as the Doppler shift. We specifically note that this technique of throwing out points in the event the Doppler shift is greater than 10 Hz may cause a biasing towards higher values for future calculations in the event no channel yields a Doppler shift estimate that is less than 10 Hz. Which is a potential source of error, however, the probability that this event will occur is somewhat small given the fact there are 10 frequency values. The Doppler shift obtained is then used to estimate a distance between each of the speakers. Then given distance of the speakers we estimate the angle between the speaker and the microphone and use that angle to then calculate an x y point. We also note that this point is the intersection of two concentric circles, each with their center at each of the two speakers. This means there are potentially two intersections. However, for simplicity and because the second intersection point tends to cause a larger distance jumps from the microphone we do not calculate the second intersection point in the event one exists. 
 
 \subsection{Setup-Android}
-We used one Samsung SM-T320 tablet and two Logitech S-120 speakers for experiment 
+We used one Samsung SM-T320 tablet and two Logitech S-120 speakers for the Android experiment 
 hardware. The experiment setup is the same as the one mentioned above for our PC 
 implementation. We keep the distance between the speaker to the device to be one meter
 and the distance between two speakers also to be one meter. 
@@ -345,19 +347,19 @@ The sampling rate we used is the same as the original paper, 44.1 KHz. It is als
 default sampling rate supported by the device. By default, we uses 44,100 as the buffer
 size to store the audio samples. Such size is chosen in order to provide the fine-grained
 frequency resolution.
-Because in Android system, there is no signal processing libraries to use, we cannot 
-call STFT function in one line as we did in PC side. Thus the first issue is how to 
-calculate frequency shift in Doppler shift. We used a third party FFT tool from 
+Because in the Android system, there is no signal processing libraries to use, we cannot 
+call use the STFT function in one line as we did on PC side. Thus the first issue is how to 
+calculate frequency and Doppler shift. We used a third party FFT tool from 
 \cite{FFT}. This FFT function will return the same number of points as the buffer size
-of the stored signal. The even index of the FFT point are the imaginary part and the odd 
+of the stored signal. The even index of the FFT points are the imaginary part and the odd 
 index of the FFT point are the real part. We then found the frequencies with the greatest
-FFT value and subtracted it with the sending frequency to obtain the frequency shift. 
-Then we are able to calculate the velocity. 
+power and subtracted it with the sending frequency to obtain the frequency shift. 
+Then we are able to calculate the distance. 
 
-To improve the accuracy of the system, we also implement MRC in Android side, the 
-technical detail is the same as above for the PC section. After applying MRC, the original
-work uses Kalman filter to smooth the data. However, there is no such filter available in
-Android system. Instead, we applied a third party filter from
+To improve the accuracy of the system, we also implement MRC on the Android side, the 
+technical details are the same as for the PC section. After applying MRC, the original
+work uses Kalman Filtering to smooth the data. However, there is no such filter available in
+Android. Instead, we applied a third party filter from
 \cite{SignalFilter} called OneEuroFilter to smooth the data.
 
 After the post processing, we were able to get the frequency shift in each axis, averaging
@@ -365,59 +367,59 @@ five sound frequencies. Then we calculate the distance using the same equations 
 above.
 
 \subsection{Lessons learned}
-The knowledge we obtained from the project, specifically with the PC implementation in mind is we learned numerous pieces of signal processing theory, including why we would want to use a STFT as opposed to an FFT. We also learned tons about spacial and frequency diversity when we attempted to implement the maximal ratio combining portion of the project since most of the examples for diversity combining techniques center around spacial diversity as opposed to frequency diversity. Despite learning this, we still are yet to find a good example on Maximal Ratio Combining  for frequency diversity. Hence it is possible our implementation is theoretically flawed. We also learned how to implement the Kalman filter in MATLAB, which is not necessarily a simple task despite there being numerous resources on how to do it. Modeling the problem as a state transition function turns out to require even more knowledge of signal processing, beyond what even to this point we have obtained. Despite this we did make an attempt to figure out how to come up with a model for our problem, unfortunately more research is necessary to build the Kalman filtering into the code. One piece of the of the project which we did not attempt to implement was the particle filtering for estimation of the starting location of the microphone. This is our largest source of error by far and is the primary reason for regular bad results. We further hypothesize that we could obtain significantly better results for the project if we would have implemented this portion.
-In Android side, The initial buffer size is chosen as 1759, which is the minimum
+The knowledge we obtained from the project, specifically with the PC implementation in mind is we learned numerous pieces of signal processing theory, including why we would want to use a STFT as opposed to an FFT. We also learned tons about spacial and frequency diversity when we attempted to implement the maximal ratio combining portion of the project, since most of the examples for diversity combining techniques center around spacial diversity as opposed to frequency diversity. Despite learning this, we still are yet to find a good example on Maximal Ratio Combining  for frequency diversity. We also learned how to implement the Kalman Filter in MATLAB, which is not necessarily a simple task despite there being numerous resources on how to do it. Modeling the problem as a state transition function turns out to require even more knowledge of signal processing, beyond what even to this point we have obtained. Despite this, we did make an attempt to figure out how to come up with a model for our problem, unfortunately more research is necessary to build the Kalman Filtering into the code. One piece of the of the project which we did not attempt to implement was the particle filtering for estimation of the starting location of the microphone. This is our largest source of error by far and is the primary reason for regular bad results. We further hypothesize that we could obtain significantly better results for the project if we would have implemented this portion.
+For Android, The initial buffer size was chosen as 1759, which is the minimum
 buffer size by default calculation using Android AudioRecorder class. 
-Using buffer size of 1759 is no doubt too small for FFT. Such value
+Using a buffer size of 1759 is undoubtedly too small for FFT. Such value
 will lead to a very low frequency resolution, which will cause the distance calculation
-to be very inaccurate. Same theory is also mentioned in the original work. The correct
-buffer size should be 44100. However, this value did not work at the first place and 
-it will lead the app to stop working immediately. One suspicious cause is the intensive
-computing cost inside the while loop for the real time signal processing. Then we 
+to be very inaccurate. The same theory is also mentioned in the original work. The correct
+buffer size should be 44,100. However, this value did not work since 
+it will cause the app to stop working immediately. One cause is the intensive
+computing cost inside the while loop for real time signal processing. We 
 optimized the code to compute the maximum frequencies in linear time. This procedure 
-allow the buffer size to be set as 44100. The app will run for approximate 15 seconds
-before it crushes.
-Even if the app will work for 15 seconds, this huge buffer size value will take one
+allows the buffer size to be set as 44100. The app will run for approximately 15 seconds
+before it deadlocks.
+Even if the app works for 15 seconds, this huge buffer size value will take one
 second to record. A long FFT does not allow us to track the device in real time. In one
-second, the device may move to other location. As a result, even though we were able to
+second, the device may move to other locations. As a result, even though we were able to
 obtain the fine grained frequency shift using our Android device, the tracking result 
 may not be accurate due to the long FFT.
 
 \section{EVALUATION} \label{evaluation}
-The evaluation was carried out on both Android and PC platforms. To evaluate the PC platform we evaluate the general ability of the platform to trace given shapes since distance will always be inaccurate due to the lack of knowing where in global space the fact we did not implement the particle filter. If one were to use distance as a metric the implementation obtains a massive error calculation. Hence the need for a more qualitative evaluation. Additionally, we note that the platform only gives a window of around 8 to 10 seconds before error in all variables, x, y theta and velocity propagates to the point where the system becomes completely incorrect and neither tracks distance nor general shape.
+The evaluation was carried out on both Android and PC platforms. To evaluate the PC platform we evaluate the general ability of the platform to trace given shapes since distance will always be inaccurate due to the lack of knowing where in global space we start. The fact we did not implement the particle filter is the reason for this. If one were to use distance as a metric the implementation obtains a massive error calculation. Hence the need for a more qualitative evaluation. Additionally, we note that the platform only gives a window of around 8 to 10 seconds before error in all variables, x, y, theta and velocity propagates to the point where the system becomes completely incorrect and neither tracks distance nor general shape.
 %\end{document}  % This is where a 'short' article might terminate
 
 %ACKNOWLEDGMENTS are optional
 \subsection{Performance Analysis - Motion Tracking}
-In figure 1 we can see the plot of tracing a simple straight line moving the microphone toward the speakers. We see the ground truth indicated by the + mark and the actual value of the microphone as *. Additionally, the time at which the point was obtained is included in the adjacent text, where t indicates the time at which the ground truth point would be obtained and ta represents the time at which the actual points are obtained. Additionally, due to a constant error of approximately 30 cm the graph takes this into account and normalizes the result by subtracting the error. From this image we see that a majority of the points near the beginning of the test are close to the ground truth values, however, as we see time approach the end of the test where $ta > 10$ we see very poor behavior from the system. This is most likely due to the error propagation.
+In figure 2 we can see the plot of tracing a simple straight line moving the microphone toward the speakers. We see the ground truth indicated by the + mark and the actual value of the microphone as *. Additionally, the time at which the point was obtained is included in the adjacent text, where t indicates the time at which the ground truth point would be obtained and ta represents the time at which the actual points were obtained. Additionally, due to a constant error of approximately 30 cm the graph takes this into account and normalizes the result by subtracting the error. From this image we see that a majority of the points near the beginning of the test are close to the ground truth values, however, as we see time approach the end of the test where $ta > 10$ we see very poor behavior from the system. This is most likely due to the error propagation.
 
 \begin{figure}[h]
 \caption{Tracing line in Y direction, while holding X constant}
-\includegraphics[width=9cm, height=10cm]{TracingY}
+\includegraphics[width=9cm, height=9cm]{TracingY}
 \end{figure}
 
-In figure 3 we see an example of the system tracing a straight line in the X direction while Y. Figure 3 is the ground truth of what the plot should be and figure 4 is the actual obtained values. Note these are in separate plots due to the values on the x-axis being much larger than the ground truth. This is because the microphone was in motion before the the sampler started up and the first Doppler shift estimation distance had a large error. We notice that it is almost constant that if the microphone is in motion before the start of the trial, an error of 30 cm in either the x or y direction is obtained, so it is possible to correct this. If the microphone is not in motion we still obtain an error around 30 cm due to the fact that the estimation of the Doppler shift, where it is small when the microphone is not in motion, it is still non-zero. This in addition to the fact we don't know the start location is why we obtain erroneous results. One possible solution for this is to not take Doppler shift values that are close enough to zero and filter them out. This could potentially be done with Baysian Filters, including Kalman Filters. 
+In figure 3 we see an example of the system tracing a straight line in the x direction while holding y constant. Figure 3 is the ground truth of what the plot should be and figure 4 is the actual obtained values. Note these are in separate plots due to the values on the x-axis being much larger than the ground truth. This is because if the microphone is not in motion we still obtain an error around 30 cm due to the fact that the estimation of the Doppler shift, where it is small when the microphone is not in motion, it is still non-zero. We notice that it is almost constant error of 30 cm in either the x or y direction, so it is possible to correct this. This in addition to the fact we don't know the start location is why we obtain erroneous results. One possible solution for this is to not take Doppler shift values that are close enough to zero and filter them out. This could potentially be done with Baysian Filters, including Kalman Filters. 
 
 \begin{figure}[h]
 \caption{Ground truth for tracing a line in the X direction}
-\includegraphics[width=9cm, height=10cm]{groundX}
+\includegraphics[width=9cm, height=9cm]{groundX}
 \end{figure}
 
 \begin{figure}[h]
 \caption{Ground truth for tracing a line in the X direction}
-\includegraphics[width=9cm, height=10cm]{x}
+\includegraphics[width=9cm, height=9cm]{x}
 \end{figure}
 
-\begin{figure}[h]
+\begin{figure}[!htb]
 \caption{PSD when using frequencies above 20kHz}
 \center
-\includegraphics[width=5cm, height=5cm]{above20}
+\includegraphics[width=5cm, height=4cm]{above20}
 \end{figure}
 
-\begin{figure}[h]
+\begin{figure}[!htb]
 \caption{PSD when using frequencies above 18kHz to 19.8kHz}
 \center
-\includegraphics[width=5cm, height=5cm]{Below20}
+\includegraphics[width=5cm, height=4cm]{Below20}
 \end{figure}
 
 \subsection{Inaudible Tone Frequency Choices}
